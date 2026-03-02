@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>CryptoCommon</RootNamespace>
+    <AssemblyName>CryptoCommon</AssemblyName>
+    <Version>2.0.0</Version>
+    <Description>ECDSA 암호화 공통모듈 - AWS Secrets Manager 연동 (.NET 10)</Description>
+    <Authors>YourOrganization</Authors>
+    <PackageId>CryptoCommon</PackageId>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <LangVersion>preview</LangVersion>
+    <PackageTags>ECDSA;Cryptography;AWS;SecretsManager;Security</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.*" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.*" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.*" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.*" />
+  </ItemGroup>
+
+</Project>
