@@ -1,6 +1,3 @@
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.Json;
 using Amazon.SecretsManager;
 using Amazon.SecretsManager.Model;
 using CryptoCommon.Interfaces;
@@ -8,6 +5,10 @@ using CryptoCommon.Models;
 using CryptoCommon.Services;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
+using Xunit;
 
 namespace CryptoCommon.Tests;
 
