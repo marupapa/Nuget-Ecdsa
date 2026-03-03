@@ -1,0 +1,41 @@
+name: NuGet へ公開
+
+on:
+  push:
+    tags: [ 'v*.*.*' ]   # v2.0.0 形式のタグプッシュ時に自動実行
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: ソースコードのチェックアウト
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # SourceLink のために全履歴が必要
+
+      - name: .NET 10 のセットアップ
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+
+      - name: 依存関係の復元
+        run: dotnet restore
+
+      - name: ビルド（Release）
+        run: dotnet build --no-restore -c Release
+
+      - name: テストの実行
+        run: dotnet test --no-build -c Release --verbosity normal
+
+      - name: NuGet パッケージの作成
+        run: dotnet pack CryptoCommon/CryptoCommon.csproj --no-build -c Release
+
+      - name: nuget.org へプッシュ
+        run: |
+          dotnet nuget push CryptoCommon/bin/Release/*.nupkg \
+            --api-key ${{ secrets.NUGET_API_KEY }} \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate

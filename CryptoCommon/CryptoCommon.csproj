@@ -1,32 +1,85 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <!-- ── 빌드 설정 ── -->
     <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>CryptoCommon</RootNamespace>
     <AssemblyName>CryptoCommon</AssemblyName>
-    <Version>2.0.0</Version>
-    <Description>ECDSA 암호화 공통모듈 - AWS Secrets Manager 연동 (.NET 10)</Description>
-    <Authors>YourOrganization</Authors>
-    <PackageId>CryptoCommon</PackageId>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <LangVersion>preview</LangVersion>
-    <PackageTags>ECDSA;Cryptography;AWS;SecretsManager;Security</PackageTags>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
+
+    <!-- ── NuGet 패키지 기본 정보 ── -->
+    <PackageId>CryptoCommon.Ecdsa</PackageId>
+    <Version>2.0.0</Version>
+    <Title>CryptoCommon ECDSA - AWS Secrets Manager 連携 暗号化モジュール</Title>
+    <Description>
+      .NET 10 ベースの ECDSA（P-256）署名・検証共通モジュールです。
+      暗号鍵を AWS Secrets Manager に安全に保管し、
+      鍵のキャッシュ・ローテーション・履歴管理をサポートします。
+      Microsoft.Extensions.DependencyInjection と完全に統合されており、
+      AddEcdsaCrypto() の1行で登録できます。
+    </Description>
+    <Authors>marupapa</Authors>
+    <Company>marupapa</Company>
+    <Copyright>Copyright © 2025 marupapa</Copyright>
+
+    <!-- ── NuGet 検索・分類 ── -->
+    <PackageTags>ECDSA;Cryptography;AWS;SecretsManager;Security;dotnet;dotnet10;signing;verification;PKI</PackageTags>
+    <PackageCategory>Security</PackageCategory>
+
+    <!-- ── ライセンス ── -->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+
+    <!-- ── リンク ── -->
+    <PackageProjectUrl>https://github.com/marupapa/Nuget-Ecdsa</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/marupapa/Nuget-Ecdsa.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+
+    <!-- ── README / アイコン ── -->
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <!-- アイコンファイルがある場合は以下のコメントを解除 -->
+    <!-- <PackageIcon>icon.png</PackageIcon> -->
+
+    <!-- ── リリースノート ── -->
+    <PackageReleaseNotes>
+      v2.0.0
+      - .NET 10 へアップグレード
+      - System.Threading.Lock の導入（SemaphoreSlim の代替）
+      - Primary Constructor の適用
+      - record 型モデルへ移行（EcdsaKeyPair, EcdsaSignatureResult）
+      - DateTimeOffset への移行（DateTime の代替）
+      - ImportFromPem() の直接使用による PEM パースの簡略化
+      - IOptions&lt;T&gt; パターンの適用
+      - IAsyncDisposable のサポート
+    </PackageReleaseNotes>
+
+    <!-- ── パッケージ生成設定 ── -->
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>   <!-- CI でのみ生成を推奨 -->
+    <IncludeSymbols>true</IncludeSymbols>                    <!-- デバッグ用シンボルを含む -->
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>         <!-- snupkg 形式（nuget.org 標準） -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>      <!-- ソースリンクのサポート -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>         <!-- リポジトリURLの公開 -->
+    <Deterministic>true</Deterministic>                      <!-- 再現可能なビルド -->
   </PropertyGroup>
 
+  <!-- README를 패키지에 포함 -->
   <ItemGroup>
     <None Include="..\README.md" Pack="true" PackagePath="\" />
+    <!-- 아이콘 파일이 있을 경우 아래 주석 해제 -->
+    <!-- <None Include="..\icon.png" Pack="true" PackagePath="\" /> -->
   </ItemGroup>
 
+  <!-- NuGet 의존성 -->
   <ItemGroup>
     <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.*" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.*" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.*" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.*" />
+    <!-- 소스 링크: GitHub 소스 디버깅 지원 -->
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.*" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>

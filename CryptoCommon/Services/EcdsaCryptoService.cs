@@ -7,8 +7,8 @@ using Microsoft.Extensions.Logging;
 namespace CryptoCommon.Services;
 
 /// <summary>
-/// ECDSA 서명/검증 서비스
-/// .NET 10: Primary Constructor, ImportFromPem(), expression body 메서드
+/// ECDSA 署名・検証サービス
+/// .NET 10: Primary Constructor、ImportFromPem()、式本体メソッドを活用
 /// </summary>
 public sealed class EcdsaCryptoService(
     IEcdsaKeyStore keyStore,
@@ -23,10 +23,10 @@ public sealed class EcdsaCryptoService(
 
         using var ecdsa = LoadPrivateKey(keyPair.PrivateKeyPem);
 
-        // SHA-256 해시 + RFC 3279 DER 인코딩 서명
+        // SHA-256 ハッシュ + RFC 3279 DER エンコード署名
         var signature = ecdsa.SignData(data, HashAlgorithmName.SHA256, DSASignatureFormat.Rfc3279DerSequence);
 
-        logger.LogDebug("ECDSA 서명 완료 (KeyId: {KeyId}, {Length}bytes)", keyPair.KeyId, data.Length);
+        logger.LogDebug("ECDSA 署名完了 (KeyId: {KeyId}, {Length}バイト)", keyPair.KeyId, data.Length);
 
         return new EcdsaSignatureResult(
             Signature: Convert.ToBase64String(signature),
@@ -62,12 +62,12 @@ public sealed class EcdsaCryptoService(
                 HashAlgorithmName.SHA256,
                 DSASignatureFormat.Rfc3279DerSequence);
 
-            logger.LogDebug("서명 검증: {Result} (KeyId: {KeyId})", isValid ? "유효" : "무효", keyPair.KeyId);
+            logger.LogDebug("署名検証: {Result} (KeyId: {KeyId})", isValid ? "有効" : "無効", keyPair.KeyId);
             return isValid;
         }
         catch (Exception ex)
         {
-            logger.LogWarning(ex, "서명 검증 중 오류 (KeyId: {KeyId})", keyPair.KeyId);
+            logger.LogWarning(ex, "署名検証中にエラーが発生 (KeyId: {KeyId})", keyPair.KeyId);
             return false;
         }
     }
@@ -76,14 +76,14 @@ public sealed class EcdsaCryptoService(
     public async Task<bool> VerifyAsync(byte[] data, string signature, CancellationToken cancellationToken = default) =>
         await VerifyAsync(new EcdsaVerifyRequest { Data = data, Signature = signature }, cancellationToken);
 
-    // ─── Private Helpers ───────────────────────────────────────────────────────
+    // ─── プライベートヘルパー ──────────────────────────────────────────────────
 
     private static ECDsa LoadPrivateKey(string privateKeyPem)
     {
         var ecdsa = ECDsa.Create();
         try
         {
-            // .NET 10: ImportFromPem - PEM 헤더/푸터 자동 처리
+            // .NET 10: ImportFromPem - PEM ヘッダー/フッターを自動処理
             ecdsa.ImportFromPem(privateKeyPem);
             return ecdsa;
         }
